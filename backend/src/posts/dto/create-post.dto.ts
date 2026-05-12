@@ -1,4 +1,4 @@
-import { Transform, Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsOptional,
@@ -33,12 +33,20 @@ const parseJson = ({ value }: { value: unknown }) => {
   return value;
 };
 
+const parseEditingConfig = ({ value }: { value: unknown }) => {
+  let parsed = value;
+  if (typeof value === 'string') {
+    try { parsed = JSON.parse(value); } catch { return value; }
+  }
+  return plainToInstance(EditingConfigDto, parsed);
+};
+
 export class CreatePostDto {
   @IsOptional()
   @IsString()
   caption?: string;
 
-  @Transform(parseJson)
+  @Transform(parseEditingConfig)
   @ValidateNested()
   @Type(() => EditingConfigDto)
   editingConfig: EditingConfigDto;

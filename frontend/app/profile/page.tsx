@@ -36,7 +36,7 @@ export default function ProfilePage() {
       .then(setPosts)
       .catch(() => {})
       .finally(() => setLoadingPosts(false))
-  }, [user])
+  }, [user?.id])
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab)

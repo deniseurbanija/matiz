@@ -23,7 +23,7 @@ export function MasonryGrid({ posts }: { posts: Post[] }) {
   return (
     <div
       className="px-4 py-4"
-      style={{ columns: '2 190px', columnGap: '12px' }}
+      style={{ columns: '3 130px', columnGap: '10px' }}
     >
       {posts.map(post => (
         <div key={post.id} className="break-inside-avoid mb-3">

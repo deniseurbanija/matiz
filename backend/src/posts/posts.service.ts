@@ -101,7 +101,7 @@ export class PostsService {
   async findByUser(userId: string, includeArchived = false): Promise<Post[]> {
     return this.postsRepo.find({
       where: { userId, ...(includeArchived ? {} : { isArchived: false }) },
-      relations: ['tool', 'tags'],
+      relations: ['user', 'tool', 'tags'],
       order: { createdAt: 'DESC' },
     });
   }
@@ -193,7 +193,7 @@ export class PostsService {
   async getSavedByUser(userId: string): Promise<Post[]> {
     const saves = await this.savesRepo.find({
       where: { userId },
-      relations: ['post', 'post.tool', 'post.tags'],
+      relations: ['post', 'post.user', 'post.tool', 'post.tags'],
       order: { createdAt: 'DESC' },
     });
     return saves.map((s) => s.post);
