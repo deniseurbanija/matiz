@@ -1,17 +1,15 @@
 import type { Post } from '../../lib/api'
 import { PostCard } from './PostCard'
 
-interface MasonryGridProps {
-  posts: Post[]
-}
+const serif = { fontFamily: 'var(--font-crimson), Georgia, serif' }
 
-export function MasonryGrid({ posts }: MasonryGridProps) {
+export function MasonryGrid({ posts }: { posts: Post[] }) {
   if (posts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center px-4">
         <p
-          className="text-4xl text-carbon/30 dark:text-cream-alt/30 mb-3"
-          style={{ fontFamily: 'var(--font-crimson), Georgia, serif' }}
+          className="text-4xl text-carbon/30 dark:text-cream-alt/30 mb-2"
+          style={serif}
         >
           Todavía no hay fotos
         </p>
@@ -24,17 +22,11 @@ export function MasonryGrid({ posts }: MasonryGridProps) {
 
   return (
     <div
-      className="px-2 sm:px-4"
-      style={{
-        columns: '2 160px',
-        columnGap: '10px',
-      }}
+      className="px-4 py-4"
+      style={{ columns: '2 190px', columnGap: '12px' }}
     >
       {posts.map(post => (
-        <div
-          key={post.id}
-          className="break-inside-avoid mb-2.5 sm:mb-3"
-        >
+        <div key={post.id} className="break-inside-avoid mb-3">
           <PostCard post={post} />
         </div>
       ))}

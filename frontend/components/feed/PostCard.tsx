@@ -1,17 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { Heart, Bookmark } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { useState } from 'react'
 import type { Post } from '../../lib/api'
 import { api } from '../../lib/api'
 import { useAuth } from '../../contexts/AuthContext'
 
-interface PostCardProps {
-  post: Post
-}
+const serif = { fontFamily: 'var(--font-crimson), Georgia, serif' }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post }: { post: Post }) {
   const { user } = useAuth()
   const [likes, setLikes] = useState(post.likesCount)
   const [liked, setLiked] = useState(false)
@@ -19,7 +17,6 @@ export function PostCard({ post }: PostCardProps) {
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (!user) return
-
     try {
       if (liked) {
         await api.posts.unlike(post.id)
@@ -36,63 +33,55 @@ export function PostCard({ post }: PostCardProps) {
 
   return (
     <Link href={`/posts/${post.id}`}>
-      <article className="group relative rounded-2xl overflow-hidden bg-white dark:bg-dark-surface shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer">
+      <article className="group flex flex-col overflow-hidden rounded-xl bg-white dark:bg-dark-surface cursor-pointer hover:shadow-[0_4px_20px_rgba(92,107,79,0.14)] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.35)] transition-shadow duration-300">
+
         {/* Image */}
         <div className="relative overflow-hidden">
           <img
             src={post.imageUrl}
             alt={post.caption ?? 'Foto editada'}
-            className="w-full h-auto block object-cover group-hover:scale-[1.02] transition-transform duration-500"
+            className="w-full h-auto block object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
             loading="lazy"
           />
-
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Like button — visible on hover */}
           <button
             onClick={handleLike}
-            className="absolute top-3 right-3 p-2 rounded-full bg-white/90 dark:bg-dark-surface/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
+            aria-label={liked ? 'Quitar me gusta' : 'Me gusta'}
+            className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-white/90 dark:bg-dark-surface/90 backdrop-blur-sm opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
           >
             <Heart
-              size={16}
-              className={liked ? 'fill-red-400 text-red-400' : 'text-warm-gray'}
+              size={13}
+              className={liked ? 'fill-rose-400 text-rose-400' : 'text-warm-gray'}
             />
           </button>
         </div>
 
-        {/* Footer */}
-        <div className="px-3 py-2.5 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
-            {/* Avatar placeholder */}
-            <div className="w-6 h-6 rounded-full bg-beige dark:bg-dark-border shrink-0 flex items-center justify-center text-[10px] text-warm-gray font-medium uppercase">
-              {(post.user?.name ?? post.user?.id ?? 'U')[0]}
-            </div>
-            <span className="text-xs text-warm-gray truncate">
-              {post.user?.name ?? 'Usuario'}
-            </span>
-          </div>
-
-          {post.tool && (
-            <span className="text-[10px] text-warm-gray bg-cream dark:bg-dark-bg px-2 py-0.5 rounded-full shrink-0 border border-beige dark:border-dark-border">
-              {post.tool.name}
+        {/* Caption + meta */}
+        <div className="flex flex-col gap-1 px-3 py-2.5">
+          {post.caption && (
+            <span
+              className="text-[13px] leading-snug text-carbon dark:text-cream-alt line-clamp-2 font-medium"
+              style={{ ...serif, fontStyle: 'italic' }}
+            >
+              {post.caption}
             </span>
           )}
-        </div>
 
-        {/* Tags */}
-        {post.tags.length > 0 && (
-          <div className="px-3 pb-2.5 flex flex-wrap gap-1">
-            {post.tags.slice(0, 2).map(tag => (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {post.tool && (
               <span
-                key={tag.id}
-                className="text-[10px] text-sage dark:text-sage-light"
+                className="text-[10px] bg-linen dark:bg-dark-bg text-carbon dark:text-cream-alt/70 px-2 py-0.5 rounded-full border border-beige dark:border-dark-border"
               >
-                #{tag.slug}
+                {post.tool.name}
               </span>
-            ))}
+            )}
+            <span
+              className="text-[11px] text-sage-mid dark:text-sage-light"
+              style={serif}
+            >
+              @{post.user?.name ?? 'usuario'}
+            </span>
           </div>
-        )}
+        </div>
       </article>
     </Link>
   )

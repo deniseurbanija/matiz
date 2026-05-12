@@ -73,7 +73,8 @@ export class PostsService {
     }
 
     // Seeded random: same seed always produces the same order → no repeats within a session
-    qb.orderBy(`md5(CAST(:seed AS TEXT) || CAST(post.id AS TEXT))`, 'ASC')
+    qb.addSelect(`md5(CAST(:seed AS TEXT) || CAST(post.id AS TEXT))`, 'random_sort')
+      .orderBy('random_sort', 'ASC')
       .setParameter('seed', seed)
       .skip(skip)
       .take(take);

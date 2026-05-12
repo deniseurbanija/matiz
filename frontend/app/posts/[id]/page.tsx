@@ -155,8 +155,12 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
         {/* Author + actions */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-beige dark:bg-dark-border flex items-center justify-center text-sm text-warm-gray font-medium uppercase">
-              {(post.user?.name ?? 'U')[0]}
+            <div className="w-9 h-9 rounded-full bg-beige dark:bg-dark-border flex items-center justify-center text-sm text-warm-gray font-medium uppercase overflow-hidden relative">
+              {post.user?.avatar ? (
+                <img src={post.user.avatar} alt={post.user.name || ""} className="w-full h-full object-cover" />
+              ) : (
+                (post.user?.name || "U")[0]
+              )}
             </div>
             <div>
               <p className="text-sm font-medium text-carbon dark:text-cream-alt">

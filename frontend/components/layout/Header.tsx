@@ -31,12 +31,18 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="shrink-0 flex flex-col leading-none">
           <span
-            className="text-2xl sm:text-3xl text-carbon dark:text-cream-alt tracking-wide select-none"
+            className="text-[26px] sm:text-[32px] text-carbon dark:text-cream-alt tracking-[0.04em] select-none"
             style={{ fontFamily: 'var(--font-crimson), Georgia, serif', fontWeight: 300 }}
           >
             Matiz
+          </span>
+          <span
+            className="hidden sm:block text-[10px] text-warm-gray tracking-[0.18em] uppercase -mt-0.5 select-none"
+            style={{ fontFamily: 'var(--font-crimson), Georgia, serif', fontStyle: 'italic', letterSpacing: '0.15em' }}
+          >
+            edición fotográfica
           </span>
         </Link>
 

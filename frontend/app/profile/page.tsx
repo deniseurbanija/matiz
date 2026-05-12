@@ -87,8 +87,12 @@ export default function ProfilePage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile card */}
         <div className="flex items-center gap-5 mb-10">
-          <div className="w-16 h-16 rounded-full bg-sage flex items-center justify-center text-2xl text-white font-medium uppercase shrink-0 select-none">
-            {(user.name ?? user.email)[0]}
+          <div className="w-16 h-16 rounded-full bg-sage flex items-center justify-center text-2xl text-white font-medium uppercase shrink-0 select-none overflow-hidden relative">
+            {user.avatar ? (
+              <img src={user.avatar} alt={user.name ?? user.email} className="w-full h-full object-cover" />
+            ) : (
+              (user.name ?? user.email)[0]
+            )}
           </div>
 
           <div className="min-w-0 flex-1">

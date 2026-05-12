@@ -8,11 +8,18 @@
   /* Colors */
   --color-cream:        #FAF8F5;
   --color-cream-alt:    #F0EDE8;
-  --color-sage:         #8B9A7E;
+  --color-sage:         #5C6B4F;
+  --color-sage-mid:     #8B9A7B;
   --color-sage-light:   #A4B494;
-  --color-beige:        #D4C4B0;
+  --color-linen:        #F5F0E8;
+  --color-beige:        #E8E3D9;
+  --color-search-bg:    #EDE9E1;
   --color-warm-gray:    #9B9387;
+  --color-nav-inactive: #B0B0A8;
   --color-carbon:       #2C2C2C;
+  --color-blush:        #EDD9D2;
+  --color-rose:         #A87565;
+  --color-rose-light:   #C49488;
   --color-dark-bg:      #1A1A17;
   --color-dark-surface: #252520;
   --color-dark-border:  #333330;
