@@ -12,7 +12,7 @@ import {
   Post,
   Put,
   Query,
-  Request,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,6 +22,9 @@ import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { QueryPostDto } from './dto/query-post.dto';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { User } from '../users/entities/user.entity';
 
 const MB10 = 10 * 1024 * 1024;
 
@@ -42,18 +45,18 @@ export class PostsController {
     )
     file: Express.Multer.File,
     @Body() dto: CreatePostDto,
-    @Request() req: any,
+    @CurrentUser() user: User,
   ) {
-    // TODO: swap with JWT guard — req.user.id will come from the auth module
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.create(userId, dto, file);
+    return this.postsService.create(user.id, dto, file);
   }
 
+  @Public()
   @Get()
   findAll(@Query() query: QueryPostDto) {
     return this.postsService.findAll(query);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.postsService.findOne(id);
@@ -63,36 +66,43 @@ export class PostsController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdatePostDto,
-    @Request() req: any,
+    @CurrentUser() user: User,
   ) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.update(id, userId, dto);
+    return this.postsService.update(id, user.id, dto);
   }
 
   @Patch(':id/archive')
-  toggleArchive(@Param('id', ParseUUIDPipe) id: string, @Request() req: any) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.toggleArchive(id, userId);
+  toggleArchive(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.toggleArchive(id, user.id);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string, @Request() req: any) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.remove(id, userId);
+  remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.remove(id, user.id);
   }
 
   // ── Likes ────────────────────────────────────────────────────────────────
 
   @Post(':id/like')
-  likePost(@Param('id', ParseUUIDPipe) id: string, @Request() req: any) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.likePost(id, userId);
+  likePost(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.likePost(id, user.id);
   }
 
   @Delete(':id/like')
-  unlikePost(@Param('id', ParseUUIDPipe) id: string, @Request() req: any) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.unlikePost(id, userId);
+  unlikePost(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.unlikePost(id, user.id);
   }
 
   // ── Saves ─────────────────────────────────────────────────────────────────
@@ -101,25 +111,25 @@ export class PostsController {
   savePost(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: { collectionId?: string },
-    @Request() req: any,
+    @CurrentUser() user: User,
   ) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.savePost(id, userId, body.collectionId);
+    return this.postsService.savePost(id, user.id, body.collectionId);
   }
 
   @Delete(':id/save')
-  unsavePost(@Param('id', ParseUUIDPipe) id: string, @Request() req: any) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.unsavePost(id, userId);
+  unsavePost(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.unsavePost(id, user.id);
   }
 
   @Patch(':id/save')
   moveSave(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: { collectionId: string | null },
-    @Request() req: any,
+    @CurrentUser() user: User,
   ) {
-    const userId: string = req.user?.id ?? 'temp-user-id';
-    return this.postsService.moveSave(id, userId, body.collectionId);
+    return this.postsService.moveSave(id, user.id, body.collectionId);
   }
 }

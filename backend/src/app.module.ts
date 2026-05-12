@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
@@ -7,9 +8,12 @@ import { Like } from './posts/entities/like.entity';
 import { Save } from './posts/entities/save.entity';
 import { Tag } from './tags/entities/tag.entity';
 import { Tool } from './tools/entities/tool.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { TagsModule } from './tags/tags.module';
 import { ToolsModule } from './tools/tools.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -28,9 +32,15 @@ import { ToolsModule } from './tools/tools.module';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
+    UsersModule,
     PostsModule,
     TagsModule,
     ToolsModule,
+  ],
+  providers: [
+    // JwtAuthGuard protects all routes; use @Public() to opt out
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
 })
 export class AppModule {}
