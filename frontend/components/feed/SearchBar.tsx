@@ -7,8 +7,6 @@ interface SearchBarProps {
   onSearch: (q: string) => void
 }
 
-const serif = { fontFamily: 'var(--font-crimson), Georgia, serif' }
-
 export function SearchBar({ defaultValue = '', onSearch }: SearchBarProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -26,7 +24,6 @@ export function SearchBar({ defaultValue = '', onSearch }: SearchBarProps) {
             defaultValue={defaultValue}
             placeholder="Buscar presets, estilos, fotógrafos…"
             className="flex-1 bg-transparent text-[13.5px] text-carbon dark:text-cream-alt placeholder-warm-gray/60 focus:outline-none"
-            style={{ ...serif, fontStyle: 'italic' }}
           />
         </div>
       </form>
