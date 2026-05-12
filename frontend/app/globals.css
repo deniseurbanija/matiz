@@ -1,26 +1,57 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Class-based dark mode ─────────────────────────────────── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ── Design tokens ──────────────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-cream:        #FAF8F5;
+  --color-cream-alt:    #F0EDE8;
+  --color-sage:         #8B9A7E;
+  --color-sage-light:   #A4B494;
+  --color-beige:        #D4C4B0;
+  --color-warm-gray:    #9B9387;
+  --color-carbon:       #2C2C2C;
+  --color-dark-bg:      #1A1A17;
+  --color-dark-surface: #252520;
+  --color-dark-border:  #333330;
+
+  /* Typography */
+  --font-serif: 'Crimson Pro', Georgia, serif;
+  --font-sans:  var(--font-inter), 'Inter', system-ui, sans-serif;
+
+  /* Transitions */
+  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Base styles ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: theme(--color-cream);
+  color: theme(--color-carbon);
+  font-family: var(--font-sans);
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+  -webkit-font-smoothing: antialiased;
 }
+
+.dark body {
+  background-color: theme(--color-dark-bg);
+  color: theme(--color-cream-alt);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: theme(--color-beige);
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb { background: theme(--color-dark-border); }

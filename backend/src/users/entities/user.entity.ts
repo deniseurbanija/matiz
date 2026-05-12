@@ -14,13 +14,13 @@ export class User {
   @Column({ nullable: true })
   avatar: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ type: 'varchar', nullable: true, select: false })
   password: string | null;
 
-  @Column({ nullable: true, select: false })
+  @Column({ type: 'varchar', nullable: true, select: false })
   googleId: string | null;
 
-  @Column({ nullable: true, select: false })
+  @Column({ type: 'varchar', nullable: true, select: false })
   hashedRefreshToken: string | null;
 
   @CreateDateColumn()

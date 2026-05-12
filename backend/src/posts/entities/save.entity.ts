@@ -21,7 +21,7 @@ export class Save {
   @Column()
   postId: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   collectionId: string | null;
 
   @ManyToOne(() => Post, (post) => post.saves, { onDelete: 'CASCADE' })

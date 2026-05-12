@@ -25,7 +25,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
         host: config.get('DB_HOST', 'localhost'),
         port: config.get<number>('DB_PORT', 5432),
         username: config.get('DB_USER', 'postgres'),
-        password: config.get('DB_PASSWORD', 'postgres'),
+        password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME', 'matiz'),
         entities: [User, Post, Like, Save, Tag, Tool],
         synchronize: config.get('NODE_ENV') !== 'production',
