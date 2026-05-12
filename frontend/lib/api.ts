@@ -8,6 +8,7 @@ export interface Tool {
   id: string
   name: string
   slug: string
+  defaultFields: string[]
 }
 
 export interface EditingSetting {
@@ -28,6 +29,13 @@ export interface Post {
   tool: Tool | null
   tags: Tag[]
   user: { id: string; name: string | null; avatar: string | null }
+  createdAt: string
+}
+
+export interface UserProfile {
+  id: string
+  name: string | null
+  avatar: string | null
   createdAt: string
 }
 
@@ -87,6 +95,10 @@ export const api = {
     getOne: (id: string) => req<Post>(`/posts/${id}`),
     create: (data: FormData) =>
       fetch(`${BASE}/posts`, { method: 'POST', credentials: 'include', body: data }).then(r => r.json()),
+    update: (id: string, data: { caption?: string; editingConfig?: { settings: EditingSetting[] }; toolId?: string; tagIds?: string[] }) =>
+      req<Post>(`/posts/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    archive: (id: string) => req<Post>(`/posts/${id}/archive`, { method: 'PATCH' }),
+    delete: (id: string) => req(`/posts/${id}`, { method: 'DELETE' }),
     like: (id: string) => req(`/posts/${id}/like`, { method: 'POST' }),
     unlike: (id: string) => req(`/posts/${id}/like`, { method: 'DELETE' }),
     save: (id: string, collectionId?: string) =>
@@ -100,5 +112,13 @@ export const api = {
 
   tools: {
     getAll: () => req<Tool[]>('/tools'),
+  },
+
+  users: {
+    getProfile: (id: string) => req<UserProfile>(`/users/${id}`),
+    getPosts: (id: string) => req<Post[]>(`/users/${id}/posts`),
+    getSaved: () => req<Post[]>('/users/me/saved'),
+    updateMe: (data: { name?: string }) =>
+      req<UserProfile>('/users/me', { method: 'PATCH', body: JSON.stringify(data) }),
   },
 }

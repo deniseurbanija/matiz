@@ -61,6 +61,14 @@ export default function UploadPage() {
   const removeSetting = (i: number) =>
     setSettings(s => s.filter((_, idx) => idx !== i))
 
+  const handleToolChange = (id: string) => {
+    setToolId(id)
+    const tool = tools.find(t => t.id === id)
+    if (tool?.defaultFields?.length) {
+      setSettings(tool.defaultFields.map(label => ({ label, value: '' })))
+    }
+  }
+
   const toggleTag = (id: string) =>
     setSelectedTags(t => t.includes(id) ? t.filter(x => x !== id) : [...t, id])
 
@@ -145,24 +153,12 @@ export default function UploadPage() {
             )}
           </div>
 
-          {/* Caption */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs text-warm-gray">Descripción (opcional)</label>
-            <textarea
-              value={caption}
-              onChange={e => setCaption(e.target.value)}
-              rows={3}
-              placeholder="Contá algo sobre esta foto o cómo la editaste…"
-              className="px-4 py-3 rounded-xl bg-white dark:bg-dark-surface border border-beige dark:border-dark-border text-sm text-carbon dark:text-cream-alt placeholder-warm-gray focus:outline-none focus:border-sage dark:focus:border-sage-light transition-colors resize-none"
-            />
-          </div>
-
           {/* Tool */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs text-warm-gray">Herramienta de edición *</label>
             <select
               value={toolId}
-              onChange={e => setToolId(e.target.value)}
+              onChange={e => handleToolChange(e.target.value)}
               className="px-4 py-2.5 rounded-xl bg-white dark:bg-dark-surface border border-beige dark:border-dark-border text-sm text-carbon dark:text-cream-alt focus:outline-none focus:border-sage dark:focus:border-sage-light transition-colors appearance-none cursor-pointer"
             >
               <option value="">Elegí una app…</option>
@@ -171,6 +167,12 @@ export default function UploadPage() {
               ))}
             </select>
           </div>
+
+          {toolId && tools.find(t => t.id === toolId)?.defaultFields?.length ? (
+            <p className="text-xs text-sage dark:text-sage-light -mt-4">
+              Campos de edición precargados para {tools.find(t => t.id === toolId)?.name}. Podés editarlos libremente.
+            </p>
+          ) : null}
 
           {/* Tags */}
           {tags.length > 0 && (
@@ -233,6 +235,18 @@ export default function UploadPage() {
           {error && (
             <p className="text-xs text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">{error}</p>
           )}
+
+                    {/* Caption */}
+                    <div className="flex flex-col gap-1.5">
+            <label className="text-xs text-warm-gray">Descripción (opcional)</label>
+            <textarea
+              value={caption}
+              onChange={e => setCaption(e.target.value)}
+              rows={3}
+              placeholder="Contá algo sobre esta foto o cómo la editaste…"
+              className="px-4 py-3 rounded-xl bg-white dark:bg-dark-surface border border-beige dark:border-dark-border text-sm text-carbon dark:text-cream-alt placeholder-warm-gray focus:outline-none focus:border-sage dark:focus:border-sage-light transition-colors resize-none"
+            />
+          </div>
 
           <button
             type="submit"

@@ -14,6 +14,18 @@ export class UsersService {
     return this.usersRepo.findOne({ where: { id } });
   }
 
+  findPublicProfile(id: string) {
+    return this.usersRepo.findOne({
+      where: { id },
+      select: { id: true, name: true, avatar: true, createdAt: true },
+    });
+  }
+
+  async updateProfile(id: string, data: { name?: string }): Promise<User> {
+    await this.usersRepo.update(id, { name: data.name ?? undefined });
+    return this.usersRepo.findOne({ where: { id } }) as Promise<User>;
+  }
+
   // Selects password explicitly (hidden by default via select: false)
   findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepo

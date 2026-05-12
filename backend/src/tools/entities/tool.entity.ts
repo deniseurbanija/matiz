@@ -10,4 +10,7 @@ export class Tool {
 
   @Column({ unique: true })
   slug: string;
+
+  @Column({ type: 'text', array: true, default: [] })
+  defaultFields: string[];
 }
